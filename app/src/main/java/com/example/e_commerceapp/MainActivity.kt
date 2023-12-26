@@ -26,9 +26,16 @@ class MainActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot){
                     listOfProducts.clear()
                     for (dataSnapshot in snapshot.children) {
-                       val products = dataSnapshot.getValue(Product::class.java)
-                        listOfProducts.add(products!!)
-
+                        val productData = dataSnapshot.value as? HashMap<*, *>
+                        if (productData != null) {
+                            val product = Product(
+                                productData["productName"] as? String,
+                                productData["productPrice"] as? String,
+                                productData["productDes"] as? String,
+                                productData["productImage"] as? String
+                            )
+                            listOfProducts.add(product)
+                        }
                     }
 
                         val productAdapter = ProductAdapter(this@MainActivity, listOfProducts)
